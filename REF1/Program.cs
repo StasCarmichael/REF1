@@ -1,21 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using REF1;
-
-public class Program
+﻿namespace REF1
 {
-    static void Main()
+
+    class Program
     {
-        User user = new User { Name = "John", Email = "john@example.com", Password = "12345" };
-        user.SaveToDatabase();
-        user.SendEmail("Welcome!");
+        static void Main()
+        {
+            IUserRepository userRepository = new UserRepository();
+            IEmailService emailService = new EmailService();
 
-        Order order = new Order { Id = 1, Products = new List<string> { "Laptop", "Mouse" }, PaymentMethod = "CreditCard", TotalAmount = 1500 };
-        order.ProcessPayment();
-        order.GenerateInvoice();
+            User user = new User { Name = "John", Email = "john@example.com", Password = "12345" };
+            userRepository.Save(user);
+            emailService.SendEmail(user.Email, "Welcome!");
 
-        Inventory inventory = new Inventory();
-        inventory.CheckStock("Laptop");
-        inventory.CheckStock("Phone");
+            IPaymentProcessor payment = new CreditCardPayment();
+            InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
+            Order order = new Order(payment, invoiceGenerator)
+            {
+                Id = 1,
+                Products = new List<string> { "Laptop", "Mouse" },
+                TotalAmount = 1500
+            };
+            order.ProcessOrder();
+        }
     }
+
 }
