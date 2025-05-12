@@ -4,7 +4,7 @@
     class Program
     {
         static void Main()
-        {
+    {
             IUserRepository userRepository = new UserRepository();
             IEmailService emailService = new EmailService();
 
@@ -15,13 +15,13 @@
             IPaymentProcessor payment = new CreditCardPayment();
             InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
             Order order = new Order(payment, invoiceGenerator)
-            {
+        {
                 Id = 1,
                 Products = new List<string> { "Laptop", "Mouse" },
                 TotalAmount = 1500
             };
             order.ProcessOrder();
-        }
     }
+}
 
 }
